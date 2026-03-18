@@ -5,7 +5,7 @@ class LandingPageView(TemplateView):
     """
     Main landing page view.
     """
-    template_name = 'core/landing.html'
+    template_name = 'landing.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
