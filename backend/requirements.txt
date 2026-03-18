@@ -1,0 +1,59 @@
+# ===========================================
+# ProFix Appliance Repair - Requirements
+# ===========================================
+
+# Django
+Django>=5.0,<6.0
+
+# Database
+psycopg2-binary>=2.9.9
+
+# Redis
+redis>=5.0.0
+django-redis>=5.4.0
+
+# REST Framework (for API)
+djangorestframework>=3.14.0
+
+# Environment variables
+python-decouple>=3.8
+
+# Phone number validation
+phonenumbers>=8.13.0
+django-phonenumber-field>=7.3.0
+
+# CORS headers
+django-cors-headers>=4.3.0
+
+# Static files
+whitenoise>=6.6.0
+
+# Production WSGI server
+gunicorn>=21.2.0
+
+# Security
+django-secure>=1.0.1
+
+# Logging (production)
+sentry-sdk>=1.39.0
+
+# ===========================================
+# Development Dependencies
+# ===========================================
+
+# Debug toolbar
+django-debug-toolbar>=4.2.0
+
+# Code formatting
+black>=24.0.0
+flake8>=7.0.0
+isort>=5.13.0
+
+# Testing
+pytest>=8.0.0
+pytest-django>=4.7.0
+pytest-cov>=4.1.0
+factory-boy>=3.3.0
+
+# Development server
+watchdog>=3.0.0
