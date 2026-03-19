@@ -9,6 +9,20 @@ from django.contrib import admin
 from django.utils.html import format_html
 from django.utils import timezone
 from .models import Booking, BookingNote
+from django.contrib.auth.models import User
+
+
+class CustomUserAdmin(admin.ModelAdmin):
+
+    def has_change_permission(self, request, obj=None):
+        if obj and not request.user.is_superuser:
+            return obj == request.user
+        return True
+
+    def has_delete_permission(self, request, obj=None):
+        if obj and not request.user.is_superuser:
+            return False
+        return True
 
 
 class BookingNoteInline(admin.TabularInline):
@@ -47,6 +61,8 @@ class BookingAdmin(admin.ModelAdmin):
         'scheduled_datetime',
         'created_at',
     ]
+
+    list_display_links = ('id', 'name')
 
     list_filter = [
         'status',
@@ -214,6 +230,16 @@ class BookingAdmin(admin.ModelAdmin):
         """Bulk action to set urgent priority."""
         updated = queryset.update(priority='urgent')
         self.message_user(request, f'{updated} booking(s) set to urgent priority.')
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+
+        # якщо не суперюзер — можна обмежити
+        if not request.user.is_superuser:
+            # наприклад показувати тільки призначені заявки
+            return qs.filter(assigned_to=request.user)
+
+        return qs
 
 
 @admin.register(BookingNote)
