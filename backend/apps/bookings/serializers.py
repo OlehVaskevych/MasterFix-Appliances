@@ -14,18 +14,33 @@ class BookingSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'phone', 'problem_description', 'created_at']
         read_only_fields = ['id', 'created_at']
 
+    def validate(self, attrs):
+        attrs['name'] = attrs['name'].strip()
+        attrs['problem_description'] = attrs['problem_description'].strip()
+        return attrs
+
     def validate_name(self, value):
-        """Validate name field."""
-        if len(value.strip()) < 2:
+        if len(value) < 2:
             raise serializers.ValidationError(
-                "Name must be at least 2 characters long."
+                "Please enter a valid name (at least 2 characters)."
             )
-        return value.strip()
+
+        if not value.replace(" ", "").isalpha():
+            raise serializers.ValidationError(
+                "Name should contain only letters."
+            )
+
+        return value
 
     def validate_problem_description(self, value):
-        """Validate problem description field."""
-        if len(value.strip()) < 10:
+        if len(value) < 10:
             raise serializers.ValidationError(
                 "Please provide a more detailed description (at least 10 characters)."
             )
-        return value.strip()
+
+        if len(value) > 500:
+            raise serializers.ValidationError(
+                "Description is too long (max 500 characters)."
+            )
+
+        return value

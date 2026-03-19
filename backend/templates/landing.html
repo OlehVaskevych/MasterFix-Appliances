@@ -383,51 +383,58 @@
             </div>
             
             <div class="booking-form-wrapper">
-                <form id="booking-form" class="booking-form" method="post" action="{% url 'bookings:create' %}">
+                <form id="booking-form" class="booking-form" method="post">
                     {% csrf_token %}
-                    
+
                     <div class="form-row">
                         <div class="form-group">
                             <label for="name">Full Name *</label>
-                            <input 
-                                type="text" 
-                                id="name" 
-                                name="name" 
+                            <input
+                                type="text"
+                                id="name"
+                                name="name"
                                 placeholder="John Smith"
                                 required
+                                value="{{ form.name.value|default:'' }}"
                             >
-                            <span class="form-error" id="name-error"></span>
+                            <span class="form-error" id="name-error">
+                                {{ form.name.errors.0 }}
+                            </span>
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="phone">Phone Number *</label>
-                            <input 
-                                type="tel" 
-                                id="phone" 
-                                name="phone" 
+                            <input
+                                type="tel"
+                                id="phone"
+                                name="phone"
                                 placeholder="(555) 123-4567"
                                 required
                             >
-                            <span class="form-error" id="phone-error"></span>
+                            <span class="form-error" id="phone-error">
+                                {{ form.phone.errors.0 }}
+                            </span>
                         </div>
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="email">Email Address</label>
-                        <input 
-                            type="email" 
-                            id="email" 
-                            name="email" 
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
                             placeholder="john@example.com"
                         >
-                        <span class="form-error" id="email-error"></span>
+                        <span class="form-error" id="email-error">
+                            {{ form.email.errors.0 }}
+                        </span>
                     </div>
-                    
+
                     <div class="form-row">
                         <div class="form-group">
                             <label for="appliance_type">Appliance Type *</label>
                             <select id="appliance_type" name="appliance_type" required>
-                                <option value="">Select appliance</option>
+                                <option value="" selected disabled>Select appliance</option>
                                 <option value="refrigerator">Refrigerator</option>
                                 <option value="washer">Washer</option>
                                 <option value="dryer">Dryer</option>
@@ -436,54 +443,60 @@
                                 <option value="microwave">Microwave</option>
                                 <option value="other">Other</option>
                             </select>
-                            <span class="form-error" id="appliance_type-error"></span>
+                            <span class="form-error" id="appliance_type-error">
+                                {{ form.appliance_type.errors.0 }}
+                            </span>
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="brand">Brand (Optional)</label>
-                            <input 
-                                type="text" 
-                                id="brand" 
-                                name="brand" 
+                            <input
+                                type="text"
+                                id="brand"
+                                name="appliance_brand"
                                 placeholder="e.g., Samsung, LG, Whirlpool"
                             >
                         </div>
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="problem_description">Describe the Problem *</label>
-                        <textarea 
-                            id="problem_description" 
-                            name="problem_description" 
-                            rows="4" 
+                        <textarea
+                            id="problem_description"
+                            name="problem_description"
+                            rows="4"
                             placeholder="Please describe what's wrong with your appliance..."
                             required
                         ></textarea>
-                        <span class="form-error" id="problem_description-error"></span>
+                        <span class="form-error" id="problem_description-error">
+                            {{ form.name.problem_description.0 }}
+                        </span>
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="zip_code">ZIP Code *</label>
-                        <input 
-                            type="text" 
-                            id="zip_code" 
-                            name="zip_code" 
+                        <input
+                            type="text"
+                            id="zip_code"
+                            name="zip_code"
                             placeholder="10001"
                             maxlength="10"
                             required
                         >
-                        <span class="form-error" id="zip_code-error"></span>
+                        <span class="form-error" id="zip_code-error">
+                            {{ form.zip_code.errors.0 }}
+                        </span>
                     </div>
-                    
+
                     <button type="submit" class="btn btn-primary btn-lg btn-block">
                         <span>Request Service</span>
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M5 12h14M12 5l7 7-7 7"/>
                         </svg>
                     </button>
-                    
+
                     <p class="form-disclaimer">
-                        By submitting this form, you agree to our 
+                        By submitting this form, you agree to our
                         <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
                     </p>
                 </form>
@@ -581,6 +594,16 @@
         </div>
     </div>
 </section>
+
+<div id="toast-container" class="toast-container">
+  {% if messages %}
+    {% for message in messages %}
+      <div class="toast {{ message.tags }}">
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
+</div>
 {% endblock %}
 
 {% block extra_js %}

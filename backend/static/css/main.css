@@ -1088,3 +1088,38 @@ section {
     border-bottom: 1px solid var(--color-border);
     box-shadow: var(--shadow-lg);
 }
+
+.toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+}
+
+.toast {
+  background: #333;
+  color: white;
+  padding: 12px 18px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.toast.success {
+  background: #22c55e;
+}
+
+.toast.error {
+  background: #ef4444;
+}
+
+input.error, textarea.error, select.error {
+  border: 2px solid #ef4444;
+}

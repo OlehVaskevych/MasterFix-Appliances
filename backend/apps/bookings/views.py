@@ -1,24 +1,29 @@
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .forms import BookingForm
+
+# DRF
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import BookingSerializer
 
-
+# === API (для Vue / AJAX) ===
 class BookingCreateView(APIView):
-    """
-    API endpoint for creating new booking requests.
-    """
-
     def post(self, request):
         serializer = BookingSerializer(data=request.data)
 
         if serializer.is_valid():
-            booking = serializer.save()
+            booking = serializer.save(
+                ip_address=request.META.get('REMOTE_ADDR'),
+                user_agent=request.META.get('HTTP_USER_AGENT')
+            )
+
             return Response(
                 {
                     'success': True,
                     'message': 'Thank you! We will contact you shortly.',
-                    'data': BookingSerializer(booking).data
+                    'data': serializer.data
                 },
                 status=status.HTTP_201_CREATED
             )
@@ -26,7 +31,6 @@ class BookingCreateView(APIView):
         return Response(
             {
                 'success': False,
-                'message': 'Please correct the errors below.',
                 'errors': serializer.errors
             },
             status=status.HTTP_400_BAD_REQUEST

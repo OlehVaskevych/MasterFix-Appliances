@@ -5,9 +5,7 @@ Landing page for a home appliance repair company in the USA.
 ## Tech Stack
 
 - **Backend:** Python 3.12, Django 5.x
-- **Frontend:** Vue.js 3 (embedded in Django templates)
 - **Database:** PostgreSQL 16
-- **Cache:** Redis 7 (for session storage and caching)
 - **Containerization:** Docker & Docker Compose
 
 ## Features
@@ -25,33 +23,52 @@ Landing page for a home appliance repair company in the USA.
 ├── backend/                    # Django application
 │   ├── config/                 # Project configuration
 │   │   ├── settings/
+│   │   │   ├── __init__.py
 │   │   │   ├── base.py        # Base settings
 │   │   │   ├── development.py # Dev settings
 │   │   │   └── production.py  # Prod settings
+│   │   ├── __init__.py
 │   │   ├── urls.py            # Root URL configuration
+│   │   ├── asgi.py
 │   │   └── wsgi.py
 │   ├── apps/
+│   │   ├── __init__.py
 │   │   ├── core/              # Core app (landing page, static pages)
+│   │   │   ├── __init__.py
 │   │   │   ├── views.py
 │   │   │   ├── urls.py
-│   │   │   └── templates/
-│   │   └── bookings/          # Bookings app (form handling)
+│   │   │   └── apps.py 
+│   │   ├── bookings/          # Bookings app (form handling)
+│   │   │   ├── migrations/
+│   │   │   ├── admin.py
+│   │   │   ├── apps.py
+│   │   │   ├── models.py
+│   │   │   ├── forms.py
+│   │   │   ├── views.py
+│   │   │   ├── serializers.py
+│   │   │   └── urls.py
+│   │   └── services/
+│   │       ├── migrations/
+│   │       ├── __init__.py
+│   │       ├── admin.py
+│   │       ├── apps.py
 │   │       ├── models.py
-│   │       ├── views.py
-│   │       ├── serializers.py
-│   │       └── urls.py
+│   │       ├── urls.py
+│   │       └── views.py
 │   ├── templates/             # Global templates
+│   │   ├── landing.html
 │   │   └── base.html
 │   ├── static/                # Static files (CSS, JS, images)
 │   │   ├── css/
 │   │   ├── js/
 │   │   └── images/
+│   ├── __init__.py
 │   ├── manage.py
 │   └── requirements.txt       # All dependencies
 ├── docker/
 │   ├── backend/
 │   │   ├── Dockerfile
-│   │   └── пш
+│   │   └── Dockerfile.prod
 │   └── nginx/
 │       ├── Dockerfile
 │       └── nginx.conf
@@ -68,7 +85,6 @@ Landing page for a home appliance repair company in the USA.
 |------------|-------|--------------------------------------|
 | backend    | 8000  | Django application (Gunicorn)        |
 | db         | 5432  | PostgreSQL database                  |
-| redis      | 6379  | Redis for caching and sessions       |
 | nginx      | 80    | Nginx reverse proxy (production)     |
 
 ## Prerequisites
@@ -165,16 +181,15 @@ docker-compose exec backend flake8
 - [ ] Admin panel configuration
 
 ### Phase 3: Frontend Development
-- [ ] Base HTML template
-- [ ] Header component with navigation
-- [ ] Services section (4 services)
-- [ ] Booking form with Vue.js validation
-- [ ] Footer component
-- [ ] Responsive CSS styles
+- [x] Base HTML template
+- [x] Header component with navigation
+- [x] Services section (4 services)
+- [x] Booking form with validation
+- [x] Footer component
+- [x] Responsive CSS styles
 
 ### Phase 4: Integration & Testing
-- [ ] API endpoint for form submission
-- [ ] Vue.js form integration
+- [x] API endpoint for form submission
 - [ ] Unit tests
 - [ ] Integration tests
 

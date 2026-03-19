@@ -1,0 +1,98 @@
+version: '3.9'
+
+services:
+  # PostgreSQL Database
+  db:
+    image: postgres:16-alpine
+    container_name: appliance_repair_db_prod
+    restart: always
+    volumes:
+      - postgres_data_prod:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - backend_network
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: appliance_repair_redis_prod
+    restart: always
+    volumes:
+      - redis_data_prod:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - backend_network
+
+  # Django Backend with Gunicorn
+  backend:
+    build:
+      context: .
+      dockerfile: docker/backend/Dockerfile.prod
+    container_name: appliance_repair_backend_prod
+    restart: always
+    volumes:
+      - static_volume_prod:/app/staticfiles
+      - media_volume_prod:/app/media
+    environment:
+      - DJANGO_SETTINGS_MODULE=config.settings.production
+      - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
+      - DJANGO_DEBUG=False
+      - DJANGO_ALLOWED_HOSTS=${DJANGO_ALLOWED_HOSTS}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_HOST=db
+      - POSTGRES_PORT=5432
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - backend_network
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py collectstatic --noinput &&
+             gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 3"
+
+  # Nginx Reverse Proxy
+  nginx:
+    build:
+      context: .
+      dockerfile: docker/nginx/Dockerfile
+    container_name: appliance_repair_nginx_prod
+    restart: always
+    volumes:
+      - static_volume_prod:/app/staticfiles:ro
+      - media_volume_prod:/app/media:ro
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - backend
+    networks:
+      - backend_network
+
+volumes:
+  postgres_data_prod:
+  redis_data_prod:
+  static_volume_prod:
+  media_volume_prod:
+
+networks:
+  backend_network:
+    name: appliance_repair_network_prod
