@@ -7,16 +7,17 @@ class BookingSerializer(serializers.ModelSerializer):
     """
     Serializer for Booking model with validation.
     """
-    phone = PhoneNumberField(region='US')
+
+    phone = PhoneNumberField(region="US")
 
     class Meta:
         model = Booking
-        fields = ['id', 'name', 'phone', 'problem_description', 'created_at']
-        read_only_fields = ['id', 'created_at']
+        fields = ["id", "name", "phone", "problem_description", "created_at"]
+        read_only_fields = ["id", "created_at"]
 
     def validate(self, attrs):
-        attrs['name'] = attrs['name'].strip()
-        attrs['problem_description'] = attrs['problem_description'].strip()
+        attrs["name"] = attrs["name"].strip()
+        attrs["problem_description"] = attrs["problem_description"].strip()
         return attrs
 
     def validate_name(self, value):
@@ -26,9 +27,7 @@ class BookingSerializer(serializers.ModelSerializer):
             )
 
         if not value.replace(" ", "").isalpha():
-            raise serializers.ValidationError(
-                "Name should contain only letters."
-            )
+            raise serializers.ValidationError("Name should contain only letters.")
 
         return value
 

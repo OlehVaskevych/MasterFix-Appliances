@@ -66,60 +66,60 @@ class Booking(models.Model):
     # === Status Choices ===
     # Defines the workflow stages for a booking
     STATUS_CHOICES = [
-        ('new', 'New'),                 # Just submitted, not yet reviewed
-        ('contacted', 'Contacted'),     # Staff has reached out to customer
-        ('scheduled', 'Scheduled'),     # Appointment date/time confirmed
-        ('in_progress', 'In Progress'), # Technician is working on it
-        ('completed', 'Completed'),     # Service successfully completed
-        ('cancelled', 'Cancelled'),     # Cancelled by customer or staff
-        ('no_response', 'No Response'), # Customer didn't respond to contact attempts
+        ("new", "New"),  # Just submitted, not yet reviewed
+        ("contacted", "Contacted"),  # Staff has reached out to customer
+        ("scheduled", "Scheduled"),  # Appointment date/time confirmed
+        ("in_progress", "In Progress"),  # Technician is working on it
+        ("completed", "Completed"),  # Service successfully completed
+        ("cancelled", "Cancelled"),  # Cancelled by customer or staff
+        ("no_response", "No Response"),  # Customer didn't respond to contact attempts
     ]
 
     # === Priority Levels ===
     # Used for scheduling and dispatch prioritization
     PRIORITY_CHOICES = [
-        ('low', 'Low'),           # Standard request, flexible timing
-        ('normal', 'Normal'),     # Default priority
-        ('high', 'High'),         # Needs attention soon
-        ('urgent', 'Urgent'),     # Emergency - same day if possible
+        ("low", "Low"),  # Standard request, flexible timing
+        ("normal", "Normal"),  # Default priority
+        ("high", "High"),  # Needs attention soon
+        ("urgent", "Urgent"),  # Emergency - same day if possible
     ]
 
     # === Preferred Time Slots ===
     # Time windows customer prefers for service
     TIME_SLOT_CHOICES = [
-        ('morning', 'Morning (8AM - 12PM)'),
-        ('afternoon', 'Afternoon (12PM - 5PM)'),
-        ('evening', 'Evening (5PM - 8PM)'),
-        ('anytime', 'Anytime'),
+        ("morning", "Morning (8AM - 12PM)"),
+        ("afternoon", "Afternoon (12PM - 5PM)"),
+        ("evening", "Evening (5PM - 8PM)"),
+        ("anytime", "Anytime"),
     ]
 
     # === Appliance Type Choices ===
     # Common household appliances we service
     APPLIANCE_TYPE_CHOICES = [
-        ('refrigerator', 'Refrigerator'),
-        ('washer', 'Washing Machine'),
-        ('dryer', 'Dryer'),
-        ('dishwasher', 'Dishwasher'),
-        ('oven', 'Oven/Range'),
-        ('microwave', 'Microwave'),
-        ('freezer', 'Freezer'),
-        ('garbage_disposal', 'Garbage Disposal'),
-        ('ice_maker', 'Ice Maker'),
-        ('wine_cooler', 'Wine Cooler'),
-        ('other', 'Other'),
+        ("refrigerator", "Refrigerator"),
+        ("washer", "Washing Machine"),
+        ("dryer", "Dryer"),
+        ("dishwasher", "Dishwasher"),
+        ("oven", "Oven/Range"),
+        ("microwave", "Microwave"),
+        ("freezer", "Freezer"),
+        ("garbage_disposal", "Garbage Disposal"),
+        ("ice_maker", "Ice Maker"),
+        ("wine_cooler", "Wine Cooler"),
+        ("other", "Other"),
     ]
 
     # === Lead Source Options ===
     # Tracks marketing effectiveness
     SOURCE_CHOICES = [
-        ('google', 'Google Search'),
-        ('facebook', 'Facebook'),
-        ('instagram', 'Instagram'),
-        ('yelp', 'Yelp'),
-        ('referral', 'Friend/Family Referral'),
-        ('repeat', 'Repeat Customer'),
-        ('flyer', 'Flyer/Print Ad'),
-        ('other', 'Other'),
+        ("google", "Google Search"),
+        ("facebook", "Facebook"),
+        ("instagram", "Instagram"),
+        ("yelp", "Yelp"),
+        ("referral", "Friend/Family Referral"),
+        ("repeat", "Repeat Customer"),
+        ("flyer", "Flyer/Print Ad"),
+        ("other", "Other"),
     ]
 
     # ==========================================
@@ -129,20 +129,20 @@ class Booking(models.Model):
     name = models.CharField(
         max_length=100,
         validators=[MinLengthValidator(2)],
-        verbose_name='Customer Name',
-        help_text='Full name of the customer (2-100 characters)'
+        verbose_name="Customer Name",
+        help_text="Full name of the customer (2-100 characters)",
     )
 
     email = models.EmailField(
         blank=True,
-        verbose_name='Email Address',
-        help_text='Optional email for confirmation and follow-up'
+        verbose_name="Email Address",
+        help_text="Optional email for confirmation and follow-up",
     )
 
     phone = PhoneNumberField(
-        region='US',
-        verbose_name='Phone Number',
-        help_text='US phone number (primary contact method)'
+        region="US",
+        verbose_name="Phone Number",
+        help_text="US phone number (primary contact method)",
     )
 
     # ==========================================
@@ -152,22 +152,19 @@ class Booking(models.Model):
     address = models.CharField(
         max_length=255,
         blank=True,
-        verbose_name='Street Address',
-        help_text='Service location street address'
+        verbose_name="Street Address",
+        help_text="Service location street address",
     )
 
     city = models.CharField(
-        max_length=100,
-        blank=True,
-        verbose_name='City',
-        help_text='City name'
+        max_length=100, blank=True, verbose_name="City", help_text="City name"
     )
 
     zip_code = models.CharField(
         max_length=10,
         blank=True,
-        verbose_name='ZIP Code',
-        help_text='US ZIP code (5 or 9 digit format)'
+        verbose_name="ZIP Code",
+        help_text="US ZIP code (5 or 9 digit format)",
     )
 
     # ==========================================
@@ -175,41 +172,41 @@ class Booking(models.Model):
     # ==========================================
 
     service = models.ForeignKey(
-        'services.Service',
+        "services.Service",
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name='bookings',
-        verbose_name='Requested Service',
-        help_text='Specific service requested (if known)'
+        related_name="bookings",
+        verbose_name="Requested Service",
+        help_text="Specific service requested (if known)",
     )
 
     appliance_type = models.CharField(
         max_length=50,
         choices=APPLIANCE_TYPE_CHOICES,
-        default='other',
-        verbose_name='Appliance Type',
-        help_text='Type of appliance needing repair'
+        default="other",
+        verbose_name="Appliance Type",
+        help_text="Type of appliance needing repair",
     )
 
     appliance_brand = models.CharField(
         max_length=100,
         blank=True,
-        verbose_name='Appliance Brand',
-        help_text='Brand/manufacturer (e.g., Samsung, LG, Whirlpool)'
+        verbose_name="Appliance Brand",
+        help_text="Brand/manufacturer (e.g., Samsung, LG, Whirlpool)",
     )
 
     appliance_model = models.CharField(
         max_length=100,
         blank=True,
-        verbose_name='Model Number',
-        help_text='Appliance model number (if available)'
+        verbose_name="Model Number",
+        help_text="Appliance model number (if available)",
     )
 
     problem_description = models.TextField(
         validators=[MinLengthValidator(10)],
-        verbose_name='Problem Description',
-        help_text='Detailed description of the issue (minimum 10 characters)'
+        verbose_name="Problem Description",
+        help_text="Detailed description of the issue (minimum 10 characters)",
     )
 
     # ==========================================
@@ -219,16 +216,16 @@ class Booking(models.Model):
     preferred_date = models.DateField(
         blank=True,
         null=True,
-        verbose_name='Preferred Date',
-        help_text='Customer\'s preferred service date'
+        verbose_name="Preferred Date",
+        help_text="Customer's preferred service date",
     )
 
     preferred_time = models.CharField(
         max_length=20,
         choices=TIME_SLOT_CHOICES,
-        default='anytime',
-        verbose_name='Preferred Time',
-        help_text='Preferred time slot for service'
+        default="anytime",
+        verbose_name="Preferred Time",
+        help_text="Preferred time slot for service",
     )
 
     # ==========================================
@@ -238,18 +235,18 @@ class Booking(models.Model):
     status = models.CharField(
         max_length=20,
         choices=STATUS_CHOICES,
-        default='new',
+        default="new",
         db_index=True,
-        verbose_name='Status',
-        help_text='Current status of this booking request'
+        verbose_name="Status",
+        help_text="Current status of this booking request",
     )
 
     priority = models.CharField(
         max_length=20,
         choices=PRIORITY_CHOICES,
-        default='normal',
-        verbose_name='Priority',
-        help_text='Priority level for scheduling'
+        default="normal",
+        verbose_name="Priority",
+        help_text="Priority level for scheduling",
     )
 
     # ==========================================
@@ -260,21 +257,19 @@ class Booking(models.Model):
         max_length=30,
         choices=SOURCE_CHOICES,
         blank=True,
-        verbose_name='Lead Source',
-        help_text='How the customer heard about us'
+        verbose_name="Lead Source",
+        help_text="How the customer heard about us",
     )
 
     ip_address = models.GenericIPAddressField(
         blank=True,
         null=True,
-        verbose_name='IP Address',
-        help_text='Captured for spam prevention'
+        verbose_name="IP Address",
+        help_text="Captured for spam prevention",
     )
 
     user_agent = models.TextField(
-        blank=True,
-        verbose_name='User Agent',
-        help_text='Browser/device information'
+        blank=True, verbose_name="User Agent", help_text="Browser/device information"
     )
 
     # ==========================================
@@ -283,15 +278,15 @@ class Booking(models.Model):
 
     notes = models.TextField(
         blank=True,
-        verbose_name='Internal Notes',
-        help_text='Staff notes (not visible to customer)'
+        verbose_name="Internal Notes",
+        help_text="Staff notes (not visible to customer)",
     )
 
     assigned_to = models.CharField(
         max_length=100,
         blank=True,
-        verbose_name='Assigned To',
-        help_text='Staff member or technician assigned to this booking'
+        verbose_name="Assigned To",
+        help_text="Staff member or technician assigned to this booking",
     )
 
     # ==========================================
@@ -301,15 +296,15 @@ class Booking(models.Model):
     scheduled_datetime = models.DateTimeField(
         blank=True,
         null=True,
-        verbose_name='Scheduled Date/Time',
-        help_text='Confirmed appointment date and time'
+        verbose_name="Scheduled Date/Time",
+        help_text="Confirmed appointment date and time",
     )
 
     completed_at = models.DateTimeField(
         blank=True,
         null=True,
-        verbose_name='Completed At',
-        help_text='When the service was completed'
+        verbose_name="Completed At",
+        help_text="When the service was completed",
     )
 
     # ==========================================
@@ -318,33 +313,33 @@ class Booking(models.Model):
 
     created_at = models.DateTimeField(
         auto_now_add=True,
-        verbose_name='Created At',
-        help_text='When this booking was submitted'
+        verbose_name="Created At",
+        help_text="When this booking was submitted",
     )
 
     updated_at = models.DateTimeField(
         auto_now=True,
-        verbose_name='Updated At',
-        help_text='Last modification timestamp'
+        verbose_name="Updated At",
+        help_text="Last modification timestamp",
     )
 
     class Meta:
-        verbose_name = 'Booking'
-        verbose_name_plural = 'Bookings'
-        ordering = ['-created_at']
+        verbose_name = "Booking"
+        verbose_name_plural = "Bookings"
+        ordering = ["-created_at"]
 
         # Database indexes for common queries
         indexes = [
-            models.Index(fields=['status', 'created_at']),
-            models.Index(fields=['priority', 'status']),
-            models.Index(fields=['phone']),
-            models.Index(fields=['scheduled_datetime']),
+            models.Index(fields=["status", "created_at"]),
+            models.Index(fields=["priority", "status"]),
+            models.Index(fields=["phone"]),
+            models.Index(fields=["scheduled_datetime"]),
         ]
 
         # Permissions for staff access control
         permissions = [
-            ('can_assign_booking', 'Can assign bookings to technicians'),
-            ('can_export_bookings', 'Can export booking data'),
+            ("can_assign_booking", "Can assign bookings to technicians"),
+            ("can_export_bookings", "Can export booking data"),
         ]
 
     def __str__(self) -> str:
@@ -357,8 +352,8 @@ class Booking(models.Model):
 
         Updates status to 'contacted' when staff reaches out to customer.
         """
-        self.status = 'contacted'
-        self.save(update_fields=['status', 'updated_at'])
+        self.status = "contacted"
+        self.save(update_fields=["status", "updated_at"])
 
     def mark_scheduled(self, scheduled_datetime) -> None:
         """
@@ -367,9 +362,9 @@ class Booking(models.Model):
         Args:
             scheduled_datetime: The confirmed appointment datetime
         """
-        self.status = 'scheduled'
+        self.status = "scheduled"
         self.scheduled_datetime = scheduled_datetime
-        self.save(update_fields=['status', 'scheduled_datetime', 'updated_at'])
+        self.save(update_fields=["status", "scheduled_datetime", "updated_at"])
 
     def mark_completed(self) -> None:
         """
@@ -378,21 +373,22 @@ class Booking(models.Model):
         Updates status and records completion timestamp.
         """
         from django.utils import timezone
-        self.status = 'completed'
-        self.completed_at = timezone.now()
-        self.save(update_fields=['status', 'completed_at', 'updated_at'])
 
-    def mark_cancelled(self, reason: str = '') -> None:
+        self.status = "completed"
+        self.completed_at = timezone.now()
+        self.save(update_fields=["status", "completed_at", "updated_at"])
+
+    def mark_cancelled(self, reason: str = "") -> None:
         """
         Mark booking as cancelled.
 
         Args:
             reason: Optional reason for cancellation (added to notes)
         """
-        self.status = 'cancelled'
+        self.status = "cancelled"
         if reason:
             self.notes = f"{self.notes}\n\nCancellation reason: {reason}".strip()
-        self.save(update_fields=['status', 'notes', 'updated_at'])
+        self.save(update_fields=["status", "notes", "updated_at"])
 
     @property
     def is_actionable(self) -> bool:
@@ -402,7 +398,7 @@ class Booking(models.Model):
         Returns:
             bool: True if booking is not completed or cancelled
         """
-        return self.status not in ['completed', 'cancelled']
+        return self.status not in ["completed", "cancelled"]
 
     @property
     def full_address(self) -> str:
@@ -413,7 +409,7 @@ class Booking(models.Model):
             str: Combined address, city, and ZIP code
         """
         parts = [self.address, self.city, self.zip_code]
-        return ', '.join(part for part in parts if part)
+        return ", ".join(part for part in parts if part)
 
 
 class BookingNote(models.Model):
@@ -442,37 +438,33 @@ class BookingNote(models.Model):
     booking = models.ForeignKey(
         Booking,
         on_delete=models.CASCADE,
-        related_name='booking_notes',
-        verbose_name='Booking',
-        help_text='The booking this note belongs to'
+        related_name="booking_notes",
+        verbose_name="Booking",
+        help_text="The booking this note belongs to",
     )
 
     author = models.CharField(
         max_length=100,
-        verbose_name='Author',
-        help_text='Staff member who added this note'
+        verbose_name="Author",
+        help_text="Staff member who added this note",
     )
 
     content = models.TextField(
-        verbose_name='Note Content',
-        help_text='Content of the note'
+        verbose_name="Note Content", help_text="Content of the note"
     )
 
     is_customer_visible = models.BooleanField(
         default=False,
-        verbose_name='Customer Visible',
-        help_text='If true, customer can see this note in their booking history'
+        verbose_name="Customer Visible",
+        help_text="If true, customer can see this note in their booking history",
     )
 
-    created_at = models.DateTimeField(
-        auto_now_add=True,
-        verbose_name='Created At'
-    )
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Created At")
 
     class Meta:
-        verbose_name = 'Booking Note'
-        verbose_name_plural = 'Booking Notes'
-        ordering = ['-created_at']
+        verbose_name = "Booking Note"
+        verbose_name_plural = "Booking Notes"
+        ordering = ["-created_at"]
 
     def __str__(self) -> str:
         """Return string representation of the note."""

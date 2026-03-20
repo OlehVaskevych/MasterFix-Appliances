@@ -13,6 +13,6 @@ from django.apps import AppConfig
 class ServicesConfig(AppConfig):
     """Configuration for the services application."""
 
-    default_auto_field = 'django.db.models.BigAutoField'
-    name = 'apps.services'
-    verbose_name = 'Services Management'
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "apps.services"
+    verbose_name = "Services Management"

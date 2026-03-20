@@ -24,61 +24,57 @@ class ServiceCategoryAdmin(admin.ModelAdmin):
     """
 
     list_display = [
-        'name',
-        'slug',
-        'services_count_display',
-        'is_active',
-        'display_order',
-        'created_at',
+        "name",
+        "slug",
+        "services_count_display",
+        "is_active",
+        "display_order",
+        "created_at",
     ]
 
     list_filter = [
-        'is_active',
-        'created_at',
+        "is_active",
+        "created_at",
     ]
 
     search_fields = [
-        'name',
-        'description',
+        "name",
+        "description",
     ]
 
     prepopulated_fields = {
-        'slug': ('name',),
+        "slug": ("name",),
     }
 
     list_editable = [
-        'is_active',
-        'display_order',
+        "is_active",
+        "display_order",
     ]
 
-    ordering = ['display_order', 'name']
+    ordering = ["display_order", "name"]
 
     readonly_fields = [
-        'created_at',
-        'updated_at',
+        "created_at",
+        "updated_at",
     ]
 
     fieldsets = (
-        ('Basic Information', {
-            'fields': ('name', 'slug', 'description')
-        }),
-        ('Display Settings', {
-            'fields': ('icon', 'image', 'is_active', 'display_order')
-        }),
-        ('Timestamps', {
-            'fields': ('created_at', 'updated_at'),
-            'classes': ('collapse',)
-        }),
+        ("Basic Information", {"fields": ("name", "slug", "description")}),
+        (
+            "Display Settings",
+            {"fields": ("icon", "image", "is_active", "display_order")},
+        ),
+        (
+            "Timestamps",
+            {"fields": ("created_at", "updated_at"), "classes": ("collapse",)},
+        ),
     )
 
-    @admin.display(description='Services')
+    @admin.display(description="Services")
     def services_count_display(self, obj):
         """Display count of active services in this category."""
         count = obj.services_count
-        return format_html(
-            '<span style="font-weight: bold;">{}</span>',
-            count
-        )
+        return format_html('<span style="font-weight: bold;">{}</span>', count)
 
 
 @admin.register(Service)
@@ -95,78 +91,73 @@ class ServiceAdmin(admin.ModelAdmin):
     """
 
     list_display = [
-        'name',
-        'category',
-        'price_display',
-        'duration_display_admin',
-        'is_featured',
-        'is_active',
-        'display_order',
+        "name",
+        "category",
+        "price_display",
+        "duration_display_admin",
+        "is_featured",
+        "is_active",
+        "display_order",
     ]
 
     list_filter = [
-        'category',
-        'is_active',
-        'is_featured',
-        'price_type',
-        'created_at',
+        "category",
+        "is_active",
+        "is_featured",
+        "price_type",
+        "created_at",
     ]
 
     search_fields = [
-        'name',
-        'short_description',
-        'full_description',
-        'category__name',
+        "name",
+        "short_description",
+        "full_description",
+        "category__name",
     ]
 
     prepopulated_fields = {
-        'slug': ('name',),
+        "slug": ("name",),
     }
 
     list_editable = [
-        'is_active',
-        'is_featured',
-        'display_order',
+        "is_active",
+        "is_featured",
+        "display_order",
     ]
 
-    ordering = ['category', 'display_order', 'name']
+    ordering = ["category", "display_order", "name"]
 
     readonly_fields = [
-        'created_at',
-        'updated_at',
+        "created_at",
+        "updated_at",
     ]
 
-    autocomplete_fields = ['category']
+    autocomplete_fields = ["category"]
 
     fieldsets = (
-        ('Basic Information', {
-            'fields': ('category', 'name', 'slug')
-        }),
-        ('Description', {
-            'fields': ('short_description', 'full_description')
-        }),
-        ('Pricing', {
-            'fields': ('price_type', 'price_from', 'price_to'),
-            'description': 'Set price_to only if price_type is "range"'
-        }),
-        ('Service Details', {
-            'fields': ('estimated_duration_minutes',)
-        }),
-        ('Display Settings', {
-            'fields': ('is_featured', 'is_active', 'display_order')
-        }),
-        ('Timestamps', {
-            'fields': ('created_at', 'updated_at'),
-            'classes': ('collapse',)
-        }),
+        ("Basic Information", {"fields": ("category", "name", "slug")}),
+        ("Description", {"fields": ("short_description", "full_description")}),
+        (
+            "Pricing",
+            {
+                "fields": ("price_type", "price_from", "price_to"),
+                "description": 'Set price_to only if price_type is "range"',
+            },
+        ),
+        ("Service Details", {"fields": ("estimated_duration_minutes",)}),
+        ("Display Settings", {"fields": ("is_featured", "is_active", "display_order")}),
+        (
+            "Timestamps",
+            {"fields": ("created_at", "updated_at"), "classes": ("collapse",)},
+        ),
     )
 
-    @admin.display(description='Price')
+    @admin.display(description="Price")
     def price_display(self, obj):
         """Display formatted price."""
         return obj.get_price_display()
 
-    @admin.display(description='Duration')
+    @admin.display(description="Duration")
     def duration_display_admin(self, obj):
         """Display formatted duration."""
         return obj.duration_display

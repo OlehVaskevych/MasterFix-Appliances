@@ -49,71 +49,71 @@ class ServiceCategory(models.Model):
     name = models.CharField(
         max_length=100,
         unique=True,
-        verbose_name='Category Name',
-        help_text='Display name for this service category (e.g., "Refrigerator Repair")'
+        verbose_name="Category Name",
+        help_text='Display name for this service category (e.g., "Refrigerator Repair")',
     )
 
     slug = models.SlugField(
         max_length=100,
         unique=True,
-        verbose_name='URL Slug',
-        help_text='URL-friendly version of the name (auto-generated if blank)'
+        verbose_name="URL Slug",
+        help_text="URL-friendly version of the name (auto-generated if blank)",
     )
 
     description = models.TextField(
         blank=True,
-        verbose_name='Description',
-        help_text='Detailed description of services in this category'
+        verbose_name="Description",
+        help_text="Detailed description of services in this category",
     )
 
     icon = models.CharField(
         max_length=50,
         blank=True,
-        verbose_name='Icon Class',
-        help_text='CSS icon class (e.g., "fa-snowflake" for refrigerator)'
+        verbose_name="Icon Class",
+        help_text='CSS icon class (e.g., "fa-snowflake" for refrigerator)',
     )
 
     image = models.ImageField(
-        upload_to='services/categories/',
+        upload_to="services/categories/",
         blank=True,
         null=True,
-        verbose_name='Category Image',
-        help_text='Representative image for this category (recommended: 400x300px)'
+        verbose_name="Category Image",
+        help_text="Representative image for this category (recommended: 400x300px)",
     )
 
     is_active = models.BooleanField(
         default=True,
-        verbose_name='Is Active',
-        help_text='Inactive categories will not be displayed on the website'
+        verbose_name="Is Active",
+        help_text="Inactive categories will not be displayed on the website",
     )
 
     display_order = models.PositiveIntegerField(
         default=0,
-        verbose_name='Display Order',
-        help_text='Order in which this category appears (lower numbers first)'
+        verbose_name="Display Order",
+        help_text="Order in which this category appears (lower numbers first)",
     )
 
     created_at = models.DateTimeField(
         auto_now_add=True,
-        verbose_name='Created At',
-        help_text='Timestamp when this category was created'
+        verbose_name="Created At",
+        help_text="Timestamp when this category was created",
     )
 
     updated_at = models.DateTimeField(
         auto_now=True,
-        verbose_name='Updated At',
-        help_text='Timestamp when this category was last modified'
+        verbose_name="Updated At",
+        help_text="Timestamp when this category was last modified",
     )
 
     class Meta:
-        verbose_name = 'Service Category'
-        verbose_name_plural = 'Service Categories'
-        ordering = ['display_order', 'name']
+        verbose_name = "Service Category"
+        verbose_name_plural = "Service Categories"
+        ordering = ["display_order", "name"]
 
         # Database indexes for common queries
         indexes = [
-            models.Index(fields=['is_active', 'display_order']),
-            models.Index(fields=['slug']),
+            models.Index(fields=["is_active", "display_order"]),
+            models.Index(fields=["slug"]),
         ]
 
     def __str__(self) -> str:
@@ -175,51 +175,51 @@ class Service(models.Model):
 
     # Pricing display type choices
     PRICE_TYPE_CHOICES = [
-        ('fixed', 'Fixed Price'),  # Exact price: "$150"
-        ('starting_from', 'Starting From'),  # Minimum price: "From $150"
-        ('range', 'Price Range'),  # Range: "$150 - $300"
-        ('call', 'Call for Quote'),  # No price shown: "Call for quote"
+        ("fixed", "Fixed Price"),  # Exact price: "$150"
+        ("starting_from", "Starting From"),  # Minimum price: "From $150"
+        ("range", "Price Range"),  # Range: "$150 - $300"
+        ("call", "Call for Quote"),  # No price shown: "Call for quote"
     ]
 
     category = models.ForeignKey(
         ServiceCategory,
         on_delete=models.CASCADE,
-        related_name='services',
-        verbose_name='Category',
-        help_text='The category this service belongs to'
+        related_name="services",
+        verbose_name="Category",
+        help_text="The category this service belongs to",
     )
 
     name = models.CharField(
         max_length=200,
-        verbose_name='Service Name',
-        help_text='Display name for this service (e.g., "Compressor Replacement")'
+        verbose_name="Service Name",
+        help_text='Display name for this service (e.g., "Compressor Replacement")',
     )
 
     slug = models.SlugField(
         max_length=200,
-        verbose_name='URL Slug',
-        help_text='URL-friendly version of the name'
+        verbose_name="URL Slug",
+        help_text="URL-friendly version of the name",
     )
 
     short_description = models.CharField(
         max_length=200,
         blank=True,
-        verbose_name='Short Description',
-        help_text='Brief description for service listings (max 200 characters)'
+        verbose_name="Short Description",
+        help_text="Brief description for service listings (max 200 characters)",
     )
 
     full_description = models.TextField(
         blank=True,
-        verbose_name='Full Description',
-        help_text='Detailed description including what the service covers'
+        verbose_name="Full Description",
+        help_text="Detailed description including what the service covers",
     )
 
     price_from = models.DecimalField(
         max_digits=10,
         decimal_places=2,
-        validators=[MinValueValidator(Decimal('0.00'))],
-        verbose_name='Price From',
-        help_text='Starting or minimum price for this service (in USD)'
+        validators=[MinValueValidator(Decimal("0.00"))],
+        verbose_name="Price From",
+        help_text="Starting or minimum price for this service (in USD)",
     )
 
     price_to = models.DecimalField(
@@ -227,17 +227,17 @@ class Service(models.Model):
         decimal_places=2,
         blank=True,
         null=True,
-        validators=[MinValueValidator(Decimal('0.00'))],
-        verbose_name='Price To',
-        help_text='Maximum price (only used if price_type is "range")'
+        validators=[MinValueValidator(Decimal("0.00"))],
+        verbose_name="Price To",
+        help_text='Maximum price (only used if price_type is "range")',
     )
 
     price_type = models.CharField(
         max_length=20,
         choices=PRICE_TYPE_CHOICES,
-        default='starting_from',
-        verbose_name='Price Display Type',
-        help_text='How the price should be displayed on the website'
+        default="starting_from",
+        verbose_name="Price Display Type",
+        help_text="How the price should be displayed on the website",
     )
 
     estimated_duration_minutes = models.PositiveIntegerField(
@@ -246,50 +246,44 @@ class Service(models.Model):
             MinValueValidator(15),  # Minimum 15 minutes
             MaxValueValidator(480),  # Maximum 8 hours
         ],
-        verbose_name='Estimated Duration (minutes)',
-        help_text='Estimated time to complete service (15-480 minutes)'
+        verbose_name="Estimated Duration (minutes)",
+        help_text="Estimated time to complete service (15-480 minutes)",
     )
 
     is_featured = models.BooleanField(
         default=False,
-        verbose_name='Is Featured',
-        help_text='Featured services are highlighted on the homepage'
+        verbose_name="Is Featured",
+        help_text="Featured services are highlighted on the homepage",
     )
 
     is_active = models.BooleanField(
         default=True,
-        verbose_name='Is Active',
-        help_text='Inactive services will not be displayed on the website'
+        verbose_name="Is Active",
+        help_text="Inactive services will not be displayed on the website",
     )
 
     display_order = models.PositiveIntegerField(
         default=0,
-        verbose_name='Display Order',
-        help_text='Order within the category (lower numbers first)'
+        verbose_name="Display Order",
+        help_text="Order within the category (lower numbers first)",
     )
 
-    created_at = models.DateTimeField(
-        auto_now_add=True,
-        verbose_name='Created At'
-    )
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Created At")
 
-    updated_at = models.DateTimeField(
-        auto_now=True,
-        verbose_name='Updated At'
-    )
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Updated At")
 
     class Meta:
-        verbose_name = 'Service'
-        verbose_name_plural = 'Services'
-        ordering = ['category', 'display_order', 'name']
+        verbose_name = "Service"
+        verbose_name_plural = "Services"
+        ordering = ["category", "display_order", "name"]
 
         # Ensure unique slug within each category
-        unique_together = [['category', 'slug']]
+        unique_together = [["category", "slug"]]
 
         # Database indexes for common queries
         indexes = [
-            models.Index(fields=['is_active', 'is_featured']),
-            models.Index(fields=['category', 'is_active']),
+            models.Index(fields=["is_active", "is_featured"]),
+            models.Index(fields=["category", "is_active"]),
         ]
 
     def __str__(self) -> str:
@@ -309,13 +303,13 @@ class Service(models.Model):
             - Range: "$150.00 - $300.00"
             - Call: "Call for quote"
         """
-        if self.price_type == 'fixed':
+        if self.price_type == "fixed":
             return f"${self.price_from:.2f}"
-        elif self.price_type == 'starting_from':
+        elif self.price_type == "starting_from":
             return f"From ${self.price_from:.2f}"
-        elif self.price_type == 'range' and self.price_to:
+        elif self.price_type == "range" and self.price_to:
             return f"${self.price_from:.2f} - ${self.price_to:.2f}"
-        elif self.price_type == 'call':
+        elif self.price_type == "call":
             return "Call for quote"
         else:
             return f"From ${self.price_from:.2f}"

@@ -8,16 +8,17 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/', include('apps.bookings.urls')),
-    path('', include('apps.core.urls')),
+    path("admin/", admin.site.urls),
+    path("api/", include("apps.bookings.urls")),
+    path("", include("apps.core.urls")),
 ]
 
 # Debug toolbar (development only)
 if settings.DEBUG:
     import debug_toolbar
+
     urlpatterns = [
-        path('__debug__/', include(debug_toolbar.urls)),
+        path("__debug__/", include(debug_toolbar.urls)),
     ] + urlpatterns
 
     # Serve media files in development

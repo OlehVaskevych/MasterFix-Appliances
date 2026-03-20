@@ -152,7 +152,7 @@ python manage.py runserver
 ### Running tests
 
 ```bash
-docker-compose exec backend pytest
+python manage.py test
 ```
 
 ### Code formatting
@@ -163,6 +163,12 @@ docker-compose exec backend black .
 
 # Flake8 for linting
 docker-compose exec backend flake8
+```
+
+### Populate test data
+
+```bash
+python manage.py seed_bookings
 ```
 
 ## Work Plan
@@ -190,14 +196,12 @@ docker-compose exec backend flake8
 
 ### Phase 4: Integration & Testing
 - [x] API endpoint for form submission
-- [ ] Unit tests
-- [ ] Integration tests
+- [x] Tests
 
 ### Phase 5: Deployment Preparation
-- [ ] Production Docker configuration
-- [ ] Nginx configuration
-- [ ] Static files collection
-- [ ] Security hardening
+- [x] Production Docker configuration
+- [x] Nginx configuration
+
 
 ## API Endpoints
 
@@ -206,6 +210,15 @@ docker-compose exec backend flake8
 | GET    | /                 | Landing page             |
 | POST   | /api/bookings/    | Submit booking form      |
 | GET    | /admin/           | Django admin panel       |
+> Note: The API endpoint is kept for future frontend integrations (e.g., Vue/React).
+
+## Admin Panel
+
+- Manage booking requests
+- Update booking status and priority
+- Add internal notes to bookings
+- Filter and search bookings
+- Restricted editing of admin users (custom permissions)
 
 ## Environment Variables
 

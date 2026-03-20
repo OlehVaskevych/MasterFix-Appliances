@@ -16,15 +16,16 @@ class ServiceCategoryListView(ListView):
     Template: services/category_list.html
     Context: 'categories' - queryset of active ServiceCategory objects
     """
+
     model = ServiceCategory
-    template_name = 'services/category_list.html'
-    context_object_name = 'categories'
+    template_name = "services/category_list.html"
+    context_object_name = "categories"
 
     def get_queryset(self):
         """Return only active categories ordered by display_order."""
-        return ServiceCategory.objects.filter(
-            is_active=True
-        ).prefetch_related('services')
+        return ServiceCategory.objects.filter(is_active=True).prefetch_related(
+            "services"
+        )
 
 
 class ServiceListView(ListView):
@@ -34,15 +35,14 @@ class ServiceListView(ListView):
     Template: services/service_list.html
     Context: 'services' - queryset of active Service objects
     """
+
     model = Service
-    template_name = 'services/service_list.html'
-    context_object_name = 'services'
+    template_name = "services/service_list.html"
+    context_object_name = "services"
 
     def get_queryset(self):
         """Return only active services with their categories."""
-        return Service.objects.filter(
-            is_active=True
-        ).select_related('category')
+        return Service.objects.filter(is_active=True).select_related("category")
 
 
 class ServiceDetailView(DetailView):
@@ -52,12 +52,11 @@ class ServiceDetailView(DetailView):
     Template: services/service_detail.html
     Context: 'service' - the Service object
     """
+
     model = Service
-    template_name = 'services/service_detail.html'
-    context_object_name = 'service'
+    template_name = "services/service_detail.html"
+    context_object_name = "service"
 
     def get_queryset(self):
         """Return only active services."""
-        return Service.objects.filter(
-            is_active=True
-        ).select_related('category')
+        return Service.objects.filter(is_active=True).select_related("category")

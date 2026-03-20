@@ -5,7 +5,6 @@ from faker import Faker
 
 from apps.bookings.models import Booking
 
-
 fake = Faker()
 
 
@@ -14,14 +13,11 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument(
-            '--count',
-            type=int,
-            default=20,
-            help='Number of bookings to create'
+            "--count", type=int, default=20, help="Number of bookings to create"
         )
 
     def handle(self, *args, **kwargs):
-        count = kwargs['count']
+        count = kwargs["count"]
 
         self.stdout.write(f"Creating {count} bookings...")
 
@@ -33,22 +29,14 @@ class Command(BaseCommand):
                 address=fake.address(),
                 city=fake.city(),
                 zip_code=fake.postcode(),
-                appliance_type=random.choice([
-                    'refrigerator',
-                    'washing_machine',
-                    'dishwasher',
-                    'oven'
-                ]),
-                appliance_brand=random.choice(['Samsung', 'LG', 'Whirlpool', 'Bosch']),
+                appliance_type=random.choice(
+                    ["refrigerator", "washing_machine", "dishwasher", "oven"]
+                ),
+                appliance_brand=random.choice(["Samsung", "LG", "Whirlpool", "Bosch"]),
                 appliance_model=fake.word(),
                 problem_description=fake.text(max_nb_chars=200),
-                status=random.choice([
-                    'new',
-                    'contacted',
-                    'scheduled',
-                    'completed'
-                ]),
-                priority=random.choice(['low', 'normal', 'high']),
+                status=random.choice(["new", "contacted", "scheduled", "completed"]),
+                priority=random.choice(["low", "normal", "high"]),
                 created_at=timezone.now(),
             )
 
